@@ -1,0 +1,56 @@
+let leafType := 0 in
+let internalType := 1 in
+let emptyTree := -1 in
+
+let proc leaf(n) = {type := leafType, v := n} in
+let proc makeLtree(n,t) = {type := internalType, left := t, v := n, right := emptyTree} in
+let proc makeRtree(n,t) = {type := internalType, left := emptyTree, v := n, right := t} in
+let proc makeTree(n,l,r) = {type := internalType, left := l, v := n, right := r} in
+
+let proc isEmpty(t) = (t = emptyTree) in
+let proc rTree(t) = if t.type = internalType then t.right else emptyTree in
+let proc lTree(t) = if t.type = internalType then t.left else emptyTree in
+let proc nodeVal(t) = t.v in
+let proc dft(t) = 
+  if (isEmpty(t)) then unit
+  else (
+		  write nodeVal(t);
+		  if (t.type = internalType) then (dft(t.left);dft(t.right)) else unit
+	   ) in
+
+let emptyQueue := -1 in
+let noItem := -1 in
+let proc isEmptyQueue(q) = (q = emptyQueue) in
+let proc push(q,item) = {hd := item, tl := q} in
+let proc pop(q) = 
+(
+ if (isEmptyQueue(q)) then {item := noItem, que := q} else
+ (
+  if (isEmptyQueue(q.tl)) then {item := q.hd, que := q.tl} else
+  (
+   let rec_que := pop(q.tl) in
+   {item := rec_que.item, que := push(rec_que.que,q.hd)}
+  )
+ )
+) in
+let queue := emptyQueue in
+
+let proc bft(t) = 
+(
+ queue := push(queue,t);
+ while (not (isEmptyQueue(queue))) do
+ (
+  let tmp := pop(queue) in
+  let item := tmp.item in
+  (
+   queue := tmp.que;
+   if (isEmpty(item)) then unit else
+   (
+	write nodeVal(item);
+	if (item.type = leafType) then unit else (queue := push(queue,lTree(item)); queue := push(queue, rTree(item)))
+   )
+  )
+ )
+)
+in
+2018
